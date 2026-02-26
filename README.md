@@ -1,22 +1,18 @@
-# 🌤️ SkyDash — Multi-City Weather Dashboard
+#  SkyDash - Multi-City Weather Dashboard
 
-> A production-quality, full-stack weather dashboard with AI-powered insights
+ A production-quality, full-stack weather dashboard with AI-powered insights
 
-![SkyDash Preview](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
-![Stack](https://img.shields.io/badge/Stack-Next.js%20%2B%20Node.js%20%2B%20MongoDB-blue)
-![AI](https://img.shields.io/badge/AI-GPT--4o%20mini%20Agent-purple)
 
 ---
 
-## 📋 Project Overview
+##  Project Overview
 
 SkyDash is a multi-user weather dashboard application where each user gets a fully isolated, personalized experience. Users can track weather across multiple cities, mark favorites, get AI-generated insights, and visualize data through multiple views.
 
-The guiding principle: **treat this like production, not a demo.** Every decision—from auth architecture to API caching—is made with real-world constraints in mind.
 
 ---
 
-## 🏗️ Chosen Tech Stack
+##  Chosen Tech Stack
 
 ### Frontend: Next.js 14 + Tailwind CSS
 **Why Next.js:** App Router provides excellent DX with server/client component separation, built-in routing, and image optimization. Tailwind enables rapid, consistent UI development without a design system bottleneck.
@@ -25,10 +21,10 @@ The guiding principle: **treat this like production, not a demo.** Every decisio
 **Why Express:** Lightweight, explicit, and widely understood. For this domain (REST API, auth, third-party proxying) Express is appropriately minimal. FastAPI or NestJS would be overkill for the feature set required.
 
 ### Database: MongoDB + Mongoose
-**Why MongoDB:** User and city data is document-oriented and schema-flexible. There's no relational complexity requiring joins—each user's cities are a simple embedded query. Mongoose provides validation, virtual fields, and middleware hooks that streamline the data layer.
+**Why MongoDB:** User and city data is document-oriented and schema-flexible. There's no relational complexity requiring joins-each user's cities are a simple embedded query. Mongoose provides validation, virtual fields, and middleware hooks that streamline the data layer.
 
 ### AI: OpenAI GPT-4o mini (LangChain-style agentic architecture)
-**Why GPT-4o mini over LangChain framework:** I implemented the agentic loop manually rather than using LangChain to avoid unnecessary abstraction overhead. The agent uses OpenAI's native function calling API with a custom tool execution loop—this gives full control, is easier to debug, and avoids LangChain's version instability. The architecture is functionally equivalent to LangChain's AgentExecutor.
+**Why GPT-4o mini over LangChain framework:** I implemented the agentic loop manually rather than using LangChain to avoid unnecessary abstraction overhead. The agent uses OpenAI's native function calling API with a custom tool execution loop-this gives full control, is easier to debug, and avoids LangChain's version instability. The architecture is functionally equivalent to LangChain's AgentExecutor.
 
 ### Trade-offs
 - MongoDB over PostgreSQL: Slightly weaker consistency guarantees, but no joins needed and horizontal scaling is simpler
@@ -37,7 +33,7 @@ The guiding principle: **treat this like production, not a demo.** Every decisio
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js 18+
@@ -94,7 +90,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 ---
 
-## 🏛️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -130,14 +126,14 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 ---
 
-## 🔐 Authentication & Authorization
+##  Authentication & Authorization
 
 **Approach:** JWT (JSON Web Tokens) with Bearer token authentication.
 
 - Passwords hashed with bcrypt (cost factor 12)
 - JWTs signed with HS256, expire in 7 days
 - Every protected route validates token via `protect` middleware
-- **Data isolation enforced at DB query level:** every city query includes `user: req.user._id` — even if a user discovers another user's city ID, they cannot access or modify it
+- **Data isolation enforced at DB query level:** every city query includes `user: req.user._id` - even if a user discovers another user's city ID, they cannot access or modify it
 - Rate limiting (100 req/15min) prevents brute-force attacks
 - Helmet.js sets security headers
 
@@ -145,7 +141,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 ---
 
-## 🤖 AI Agent Design
+##  AI Agent Design
 
 The AI agent (`SkyMind`) is implemented as an agentic loop using OpenAI's function calling API:
 
@@ -163,9 +159,9 @@ Response to user
 ```
 
 **Tools available to the agent:**
-1. `analyze_weather_comparison` — Compare cities by temperature, wind, ideal travel conditions
-2. `get_activity_recommendation` — Suggest activities based on weather conditions
-3. `check_extreme_conditions` — Alert on dangerous weather patterns
+1. `analyze_weather_comparison` - Compare cities by temperature, wind, ideal travel conditions
+2. `get_activity_recommendation` - Suggest activities based on weather conditions
+3. `check_extreme_conditions` - Alert on dangerous weather patterns
 
 **Why this design:** The agentic loop allows the model to reason step-by-step and use tools when needed rather than hallucinating answers. The tools are deterministic and operate on real data already fetched, so no additional API calls are made during the agent loop.
 
@@ -173,7 +169,7 @@ Response to user
 
 ---
 
-## ✨ Creative Custom Feature: Weather Intelligence Dashboard
+##  Creative Custom Feature: Weather Intelligence Dashboard
 
 **What it is:** A "Stats" view (accessible via the dashboard view switcher) that provides:
 - Hottest/coolest/windiest/most humid city across your tracked network
@@ -182,13 +178,13 @@ Response to user
 - Automatic extreme weather alerts (heat > 35°C, frost, high winds, thunderstorms)
 - Weather condition breakdown (how many cities are clear vs rainy vs cloudy)
 
-**Problem it solves:** When you're tracking 10+ cities, the grid of cards becomes information-dense. The Stats view gives you a bird's-eye summary — useful for travelers deciding where to go, or remote workers deciding which office city to visit.
+**Problem it solves:** When you're tracking 10+ cities, the grid of cards becomes information-dense. The Stats view gives you a bird's-eye summary - useful for travelers deciding where to go, or remote workers deciding which office city to visit.
 
 **Why this is interesting:** It transforms the dashboard from a collection of widgets into an actual decision-support tool.
 
 ---
 
-## 🔑 Key Design Decisions & Trade-offs
+##  Key Design Decisions & Trade-offs
 
 | Decision | Chosen | Alternative | Why |
 |---|---|---|---|
@@ -200,9 +196,9 @@ Response to user
 
 ---
 
-## ⚠️ Known Limitations
+##  Known Limitations
 
-- AI chat requires an OpenAI API key — gracefully degrades without one
+- AI chat requires an OpenAI API key - gracefully degrades without one
 - In-memory cache clears on server restart (would use Redis in production)
 - Map view is approximate (projection is equirectangular, not Mercator)
 - No email verification on registration
@@ -210,7 +206,7 @@ Response to user
 
 ---
 
-## 🚢 Deployment Guide
+##  Deployment Guide
 
 ### Recommended: Railway (Backend) + Vercel (Frontend)
 
@@ -228,7 +224,7 @@ Response to user
 # Vercel auto-detects Next.js
 ```
 
-**MongoDB:** Use MongoDB Atlas free tier (M0) — connect via MONGODB_URI.
+**MongoDB:** Use MongoDB Atlas free tier (M0) - connect via MONGODB_URI.
 
 ### Docker (Self-hosted)
 ```bash
@@ -237,7 +233,7 @@ docker-compose up --build
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 weather-dashboard/
